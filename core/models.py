@@ -14,19 +14,7 @@ class Idc_info(models.Model):
         verbose_name_plural = verbose_name
 
 
-biz_group_choice = (
-(u'大数据部', u'大数据部'),
-(u'系统运维部', u'系统运维部'),
-(u'会员服务部', u'会员服务部'),
 
-(u'ITBP项目部', u'ITBP项目部'),
-(u'电商服务部', u'电商服务部'),
-(u'财务服务部', u'财务服务部'),
-(u'技术中台部', u'技术中台部'),
-(u'业务中台部', u'业务中台部'),
-
-
-)
 
 
 class devgroup_name(models.Model):
