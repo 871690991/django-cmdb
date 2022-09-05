@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="layui-tab-item layui-show">
+    <div class="main_hd with_extra">
+        <h2>私有云集群看板
+        </h2>
+    </div>
+
+
+        <form class="layui-form">
+        <table class="layui-table">
+            <thead>
+                <tr class="active">
+                    <th>#</th>
+                    <th>集群</th>
+                    <th>节点数</th>
+                    <th>虚拟机数</th>
+                    <th>VCPU</th>
+                    <th>已使用VCPU</th>
+                    <th>CPU超配比</th>
+                    <th>磁盘总量(gb)</th>
+                    <th>已使用磁盘(gb)</th>
+                    <th>磁盘使用率</th>
+                    <th>内存总量(gb)</th>
+                    <th>已使用内存(gb)</th>
+                    <th>内存使用率</th>
+                    <th>IP地址数</th>
+                    <th>已使用IP地址</th>
+                    <th>IP地址使用率</th>
+                    <th>可创建标准c4m8数量</th>
+                </tr>
+            </thead>
+            <tbody id="datas">
+                <tr style="display: table-row; opacity: 1;">
+                    {% for obj in obj_info %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <!--<td>{{obj.cluster.cluster_name}}</td>-->
+                            <td>
+                              {{obj.cluster}}
+                            </td>
+                            <td>{{obj.node_num}}</td>
+                            <td>{{obj.running_vms_total}}</td>
+                            <td>{{obj.vcpus_total}}</td>
+                            <td>{{obj.vcpus_used_total}}</td>
+                            {% if obj.vcpus_used_percent > 90 %}
+                                <td><a style="color: #ff1a13;font-weight: bold">{{obj.vcpus_used_percent}}</a>%</td>
+                            {% elif obj.vcpus_used_percent > 80 %}
+                                <td><a style="color: #ffab0f;font-weight: bold">{{obj.vcpus_used_percent}}</a>%</td>
+                            {% else %}
+                                <td><a style="color: #2fff1f;font-weight: bold">{{obj.vcpus_used_percent}}</a>%</td>
+                            {% endif %}
+                            <td>{{obj.local_gb_total}}</td>
+                            <td>{{obj.local_gb_used_total}}</td>
+                            {% if obj.local_gb_used_percent > 90 %}
+                                <td><a style="color: #ff1a13;font-weight: bold">{{obj.local_gb_used_percent}}</a>%</td>
+                            {% elif obj.local_gb_used_percent > 80 %}
+                                <td><a style="color: #ffab0f;font-weight: bold">{{obj.local_gb_used_percent}}</a>%</td>
+                            {% else %}
+                                <td><a style="color: #2fff1f;font-weight: bold">{{obj.local_gb_used_percent}}</a>%</td>
+                            {% endif %}
+                            <td>{{obj.memory_mb_total}}</td>
+                            <td>{{obj.memory_mb_used_total}}</td>
+                            {% if obj.memory_mb_used_percent > 90 %}
+                                <td><a style="color: #ff1a13;font-weight: bold">{{obj.memory_mb_used_percent}}</a>%</td>
+                            {% elif obj.memory_mb_used_percent > 80 %}
+                                <td><a style="color: #ffab0f;font-weight: bold">{{obj.memory_mb_used_percent}}</a>%</td>
+                            {% else %}
+                                <td><a style="color: #2fff1f;font-weight: bold">{{obj.memory_mb_used_percent}}</a>%</td>
+                            {% endif %}
+                            <td>
+                               {{obj.network_total_num}}
+                            </td>
+                            <td>{{obj.network_used_num}}</td>
+                            {% if obj.network_used_percent > 90 %}
+                                <td><a style="color: #ff1a13;font-weight: bold">{{obj.network_used_percent}}</a>%</td>
+                            {% elif obj.network_used_percent > 80 %}
+                                <td><a style="color: #ffab0f;font-weight: bold">{{obj.network_used_percent}}</a>%</td>
+                            {% else %}
+                                <td><a style="color: #2fff1f;font-weight: bold">{{obj.network_used_percent}}</a>%</td>
+                            {% endif %}
+                             <td>{{obj.standard_c4m8_available}}</td>
+                        </tr>
+                    {% endfor %}
+                </tr>
+            </tbody>
+            <tfoot>
+            </tfoot>
+        </table>
+
+
+        <div class="main_hd with_extra">
+            计算节点看板
+            
+        </div>
+
+    <table class="layui-table">
+    <thead>
+        <tr>
+            <th>节点ID</th>
+            <th>所属集群</th>
+            <th>主机名</th>
+            <th>IP地址</th>
+            <th>类型</th>
+            <th>虚拟机数量</th>
+            <th>当前状态</th>
+            <th>是否启用</th>
+            <th>vcpus数量</th>
+            <th>已使用vcpu</th>
+            <th>vcpu超配比</th>
+            <th>磁盘(单位:gb)</th>
+            <th>已使用磁盘(单位:gb)</th>
+            <th>磁盘使用率</th>
+            <th>内存(单位:gb)</th>
+            <th>已使用内存(单位:gb)</th>
+            <th>内存使用率</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for obj in compute_res %}
+        <tr>
+            <td>{{obj.node_id}}</td>
+            <td>{{obj.cluster}}</td>
+            <td>{{obj.hypervisor_hostname}}</td>
+            <td>{{obj.host_ip}}</td>
+            <td>{{obj.hypervisor_type}}</td>
+            <td><a href="/cloud/cluster/member/?node={{obj.hypervisor_hostname}}" class="layui-table-link" target="_self" style="color: #BA55D3;font-weight: bold">{{obj.running_vms}}</a></td>
+            <td>{{obj.state}}</td>
+            <td>{{obj.status}}</td>	
+            
+            <td>{{obj.vcpus}}</td>
+            <td>{{obj.vcpus_used}}</td>
+            <!--<td>{{obj.vcpus_used_percent}}%</td>-->
+            {% if obj.vcpus_used_percent > 90 %}
+                <td><a style="color: #ff1a13;font-weight: bold">{{obj.vcpus_used_percent}}</a>%</td>
+            {% elif obj.vcpus_used_percent > 80 %}
+                <td><a style="color: #ffab0f;font-weight: bold">{{obj.vcpus_used_percent}}</a>%</td>
+            {% else %}
+                <td><a style="color: #2fff1f;font-weight: bold">{{obj.vcpus_used_percent}}</a>%</td>
+            {% endif %}
+            <td>{{obj.local_gb}}</td>
+            <td>{{obj.local_gb_used}}</td>
+            {% if obj.local_gb_used_percent > 90 %}
+                <td><a style="color: #ff1a13;font-weight: bold">{{obj.local_gb_used_percent}}</a>%</td>
+            {% elif obj.local_gb_used_percent > 80 %}
+                <td><a style="color: #ffab0f;font-weight: bold">{{obj.local_gb_used_percent}}</a>%</td>
+            {% else %}
+                <td><a style="color: #2fff1f;font-weight: bold">{{obj.local_gb_used_percent}}</a>%</td>
+            {% endif %}
+            <td>{{obj.memory_mb}}</td>
+            <td>{{obj.memory_mb_used}}</td>
+            {% if obj.memory_mb_used_percent > 90 %}
+                <td><a style="color: #ff1a13;font-weight: bold">{{obj.memory_mb_used_percent}}</a>%</td>
+            {% elif obj.memory_mb_used_percent > 80 %}
+                <td><a style="color: #ffab0f;font-weight: bold">{{obj.memory_mb_used_percent}}</a>%</td>
+            {% else %}
+                <td><a style="color: #2fff1f;font-weight: bold">{{obj.memory_mb_used_percent}}</a>%</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+        </form>
+</div>
+{% endblock content %}

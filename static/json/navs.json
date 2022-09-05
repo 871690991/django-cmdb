@@ -1,0 +1,73 @@
+{
+	"contentManagement": [
+		
+		{
+			"title": "应用管理",
+			"icon": "&#xe653;",
+			"href": "",
+			"spread": true,
+			"children": [{
+				"title": "业务线信息",
+				"icon": "",
+				"href": "/cmdb/appdomain/",
+				"spread": true
+			},{
+				"title": "应用信息",
+				"icon": "",
+				"href": "/cmdb/appinfo/",
+				"spread": false
+			},{
+				"title": "机房信息",
+				"icon": "",
+				"href": "/cmdb/idc/",
+				"spread": true
+			}
+
+		
+		
+		
+		]
+		},
+		
+		
+		
+		
+		{
+			"title": "资产管理",
+			"icon": "&#xe65e;",
+			"href": "",
+			"spread": true,
+			"children": [{
+				"title": "物理机",
+				"icon": "",
+				"href": "/server/host/",
+				"spread": false
+			},
+			{
+			"title": "虚拟机",
+			"icon": "",
+			"href": "/server/vm/",
+			"spread": false
+		}
+		
+		]
+		},
+		{
+			"title": "私有云管理",
+			"icon": "&#xe609;",
+			"href": "",
+			"spread": true,
+			"children": [{
+				"title": "主机管理",
+				"icon": "",
+				"href": "/server/host/",
+				"spread": false
+			}
+		
+		]
+		}
+
+
+	]
+
+}

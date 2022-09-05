@@ -1,0 +1,113 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="layui-tab-item layui-show">
+    <div class="main_hd with_extra">
+        <h2>修改密码
+        </h2>
+    </div>
+<form class="layui-form" style="width:80%;height:500px;" >
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">用户名</label>
+		<div class="layui-input-block">
+            <input type="text" value="{{user}}" disabled class="layui-input layui-disabled username" > 
+
+		</div>
+	</div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">旧密码</label>
+        <div class="layui-input-block">
+            <input type="password" value="" placeholder="请输入旧密码" lay-verify="required|oldPwd" id="oldPwd" class="layui-input pwd">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">新密码</label>
+        <div class="layui-input-block">
+            <input type="password" value="" placeholder="请输入新密码" lay-verify="required|newPwd" id="nPwd" class="layui-input pwd">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">确认密码</label>
+        <div class="layui-input-block">
+            <input type="password" value="" placeholder="请确认密码" lay-verify="required|confirmPwd" class="layui-input pwd">
+        </div>
+    </div>
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<div class="layui-input-block">
+			<button class="layui-btn " lay-submit="" lay-filter="addUser">立即修改</button>
+  		</div>
+	</div>
+
+
+
+</form>
+
+</div>
+
+{% endblock content %}
+
+
+{% block script %}
+
+<script>layui.use(['form','layer'],function(){
+    var form = layui.form
+        layer = parent.layer === undefined ? layui.layer : top.layer,
+        $ = layui.jquery;
+    //添加验证规则
+    form.verify({
+
+        newPwd : function(value, item){
+            if(value.length < 6){
+                return "密码长度不能小于6位";
+            }
+        },
+        confirmPwd : function(value, item){
+            if(!new RegExp($("#nPwd").val()).test(value)){
+                return "两次输入密码不一致，请重新输入！";
+            }
+        }
+    })
+
+    var $username = $(".username").val();
+    var $pwd = $("#pwd").val()
+    form.on("submit(addUser)",function(data){
+        
+
+
+        $.ajax({
+            url:'/editpassword/',//发出请求
+            type:'post',
+            data:{"username":$username,"oldpass":$("#oldPwd").val(),"newpass":$("#nPwd").val()},
+            dataType:"json",
+
+            success:function (res)  {
+
+                if(res.status==1){//返回1说明登录成功
+
+                    layer.msg(res.msg, {time:300});
+                    setTimeout(function(){                    
+                    layer.closeAll("iframe");
+                    //刷新父页面
+                    parent.location.reload();},300)
+
+
+
+                            }
+                if(res.status==0){
+                    layer.msg(res.msg,function() {time:1000})
+                }
+            }
+
+        });
+
+        return false;
+
+
+
+    })
+    //格式化时间
+
+})</script>
+{% endblock script %}

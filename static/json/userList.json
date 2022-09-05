@@ -1,0 +1,28 @@
+{
+    "code": 0,
+    "msg": "",
+    "count": 3,
+    "data": [
+      {
+        "idcName": "ip",
+        "idcNum": "192.168.1.1"
+      },{
+        "idcName": "hostname",
+        "idcNum": "192.168.1.1"
+      },{
+        "idcName": "hostname",
+        "idcNum": "192.168.1.1"
+      },{
+        "idcName": "hostname",
+        "idcNum": "192.168.1.1"
+      },{
+        "idcName": "hostname",
+        "idcNum": "192.168.1.1"
+      },{
+        "idcName": "hostname",
+        "idcNum": "192.168.1.1"
+      }
+    ]
+  }
+
+

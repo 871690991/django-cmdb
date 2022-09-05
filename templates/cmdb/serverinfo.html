@@ -1,0 +1,171 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="layui-tab-item layui-show">
+
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+        <legend> 物理机详情</legend>
+      </fieldset>
+      <div class="layui-tab" lay-filter="current">
+        <ul class="layui-tab-title">
+          <li class="layui-this" lay-id="1">物理机详细内容</li>
+          <li lay-id="2">虚拟机信息</li>
+        </ul>
+        <div class="layui-tab-content">
+          <div class="layui-tab-item layui-show">
+            <form class="layui-form">
+                
+                <table id="userList" lay-filter="userList" lay-skin="line"></table>
+            </form></div>
+          <div class="layui-tab-item">
+
+
+            <form class="layui-form">
+                
+                <table id="List2" lay-filter="List2" lay-skin="line"></table>
+            </form>
+
+
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+    
+</div>
+
+
+
+
+{% endblock content %}
+
+
+
+
+{% block script %}
+<script>
+
+
+
+
+
+layui.use(['form', 'layer', 'table', 'laytpl'], function() {
+	var form = layui.form,
+		layer = parent.layer === undefined ? layui.layer : top.layer,
+		$ = layui.jquery,
+		laytpl = layui.laytpl,
+        element = layui.element,
+		table = layui.table;
+        
+
+function getQueryString() {
+	var qs = window.location.search.length > 0? window.location.search.substring(1):'';    // 获取当前URL中除?后的所有字符串
+	var arr = qs.length > 0? qs.split('&'):[];    // 将获取的字符串切割成数组
+	var args = [];    // 定义个数组用来存储结果
+	arr.forEach(function(item,index,array) {
+		if(item.split('=')[0].length>0) {    // 将每一项切割成数组，并赋值到新定义的数组中
+			args[item.split('=')[0]] = item.split('=')[1]
+		}
+	})
+	return args;
+}
+
+
+
+//Hash地址的定位
+var layid = location.hash.replace(/^#current=/, '');
+element.tabChange('current', layid);
+
+element.on('tab(current)', function(elem){
+  location.hash = 'current='+ $(this).attr('lay-id');
+});
+        
+
+var myStr=getQueryString();
+
+	//用户列表
+	var tableIns = table.render({
+		elem: '#userList',
+        url:'/api/getserverinfo/?ip='+myStr["ip"],
+		id: "userListTable",
+        width:"500",
+
+
+		cols: [
+			[
+				{
+					field: 'title',
+					align: "center"
+                    
+				},
+				{
+					field: 'data',
+					align: 'center',
+				},
+
+
+
+			]
+		]
+	});
+    $('.layui-table .layui-table-cell > span').css({'font-weight': 'bold'});
+    $('th').hide();
+
+	var tableIns = table.render({
+		elem: '#List2',
+        url:'/server/find_vmlist/?ip='+myStr["ip"],
+		id: "userListTable",
+
+
+		cols: [
+			[
+				{
+					field: 'ip',
+					title: 'ip',
+					align: "center"
+				},
+				{
+					field: 'hostname',
+					title: '主机名',
+					align: 'center',
+				},
+                {
+					field: 'env',
+					title: '环境',
+					align: 'center',
+				},
+				{
+					field: 'status',
+					title: '状态',
+					align: 'center',
+				},
+				{
+					field: 'app_info',
+					title: '应用',
+					align: 'center',
+				},
+
+			]
+		]
+	});
+
+
+
+
+
+
+    
+})
+</script>
+{% endblock script %}

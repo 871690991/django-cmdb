@@ -1,0 +1,48 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="layui-tab-item layui-show">
+    <div class="main_hd with_extra">
+        <h2>私有云集群看板
+        </h2>
+
+        <input type="button" name="Submit" onclick="javascript:history.back(-1);" value="返回集群看版" class="layui-btn layui-btn-primary layui-border-green layui-btn-radius">
+
+    </div>
+
+        <form class="layui-form">
+
+<table class="layui-table">
+    <thead>
+        <tr>
+            <th>宿主机</th>
+            <th>虚拟机ID</th>
+            <th>主机名</th>
+            <th>IP地址</th>
+            <th>类型</th>
+            <th>集群</th>
+            <th>状态</th>
+            <th>创建日期</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for obj in member_res %}
+        <tr>
+            <td>{{obj.compute}}</td>
+            <td>{{obj.server_id}}</td>
+            <td>{{obj.name}}</td>
+            <td>{{obj.ip}}</td>
+            <td>{{obj.flavor}}</td>
+            <td>{{obj.cluster_name.cluster_name}}</td>
+            <td>{{obj.status}}</td>
+            <td>{{obj.date}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</form>
+</div>
+{% endblock content %}

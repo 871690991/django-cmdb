@@ -1,0 +1,268 @@
+
+{% extends "minibase.html" %}
+
+{% block content %}
+
+<form class="layui-form" style="width:80%;height: 580px">
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">业务ip</label>
+		<div class="layui-input-block">
+			<input type="text" class="layui-input ip" lay-verify="required" placeholder="请输入业务ip">
+		</div>
+	</div>
+
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">主机名</label>
+		<div class="layui-input-block">
+			<input type="text" class="layui-input hostname" lay-verify="required" placeholder="请输入主机名">
+		</div>
+	</div>
+
+
+
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">管理ip</label>
+		<div class="layui-input-block">
+			<input type="text" class="layui-input managerip" lay-verify="required" placeholder="请输入管理ip">
+		</div>
+	</div>
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">状态</label>
+
+
+        <div class="layui-input-block">
+
+        <select  lay-filter="required" id="status" lay-search>
+            <option value="">请选择状态</option>
+
+            {% for g in status %}
+            <option value="{{g.id}}" name="{{g.name}}">{{g.name}}</option>
+        {% endfor %}			
+
+
+        </select>
+    </div>
+	</div>
+
+
+
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">环境</label>
+
+
+        <div class="layui-input-block">
+
+            <select  lay-filter="required" id="env"  lay-search>
+                <option value="">请选择环境</option>
+    
+                {% for g in env %}
+                <option value="{{g.id}}" name="{{g.name}}">{{g.name}}</option>
+            {% endfor %}			
+    
+    
+            </select>
+        </div>
+	</div>
+
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">应用 </label>
+
+        <div class="layui-input-block">
+
+
+            <select  lay-filter="required" id="app_info" name="app_info" class="layui-input app_info"lay-search>
+                <option value="">请选择应用</option>
+
+                {% for g in app %}
+                <option value="{{g.id}}" name="{{g.enname}}">{{g.enname}}</option>
+            {% endfor %}			
+
+
+            </select>
+          </div>
+
+	</div>
+
+
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">机房 </label>
+
+        <div class="layui-input-block">
+
+
+            <select  lay-filter="required" id="idc" name="idc" class="layui-input idc"lay-search>
+                <option value="">请选择机房</option>
+
+                {% for g in idc %}
+                <option value="{{g.id}}" name="{{g.name}}">{{g.name}}</option>
+            {% endfor %}			
+
+
+            </select>
+          </div>
+
+	</div>
+
+
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">机型</label>
+		<div class="layui-input-block">
+			<input type="text" class="layui-input brand" lay-verify="required" placeholder="请输入机型">
+		</div>
+	</div>
+
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">硬件配置</label>
+		<div class="layui-input-block">
+			<input type="text" class="layui-input hardware_parameters" lay-verify="required" placeholder="请输入硬件配置">
+		</div>
+	</div>
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">机柜</label>
+		<div class="layui-input-block">
+			<input type="text" class="layui-input rittal" lay-verify="required" placeholder="请输入机柜">
+		</div>
+	</div>
+
+
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">U位</label>
+		<div class="layui-input-block">
+			<input type="text" class="layui-input u_site" lay-verify="required" placeholder="请输入U位">
+		</div>
+	</div>
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">sn序列号</label>
+		<div class="layui-input-block">
+			<input type="text" class="layui-input sn" lay-verify="required" placeholder="请输入sn序列号">
+		</div>
+	</div>
+
+
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">操作系统</label>
+        <div class="layui-input-block">
+			<input type="text" class="layui-input system" lay-verify="required" placeholder="请输入操作系统">
+          </div>
+	</div>
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">购买时间</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" id="buy_time" placeholder="yyyy-MM-dd">
+          </div>
+	</div>
+
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">过保时间</label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" id="expire_date" placeholder="yyyy-MM-dd">
+          </div>
+	</div>
+
+
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<div class="layui-input-block">
+			<button class="layui-btn " lay-submit="" lay-filter="addUser">立即添加</button>
+			<button type="reset" class="layui-btn  layui-btn-primary">取消</button>
+		</div>
+	</div>
+</form>
+
+
+
+{% endblock content %}
+
+
+{% block script %}
+
+<script>layui.use(['form','layer','laydate'],function(){
+    var form = layui.form
+        layer = parent.layer === undefined ? layui.layer : top.layer,
+        $ = layui.jquery;
+
+    var laydate = layui.laydate;
+
+
+
+
+    laydate.render({
+        elem: '#buy_time'
+        ,value: '2022-01-01'
+        ,isInitValue: true
+    });
+    laydate.render({
+        elem: '#expire_date'
+        ,value: '2023-01-01'
+        ,isInitValue: true
+    });
+    form.on("submit(addUser)",function(data){
+        //弹出loading
+        var index = top.layer.msg('数据提交中，请稍候',{icon: 16,time:false,shade:0.8});
+
+
+
+        var $ip = $(".ip").val();
+        var $hostname = $(".hostname").val();
+        var $managerip = $(".managerip").val();
+
+
+        var $status = $("#status").val();
+
+        var $env = $("#env").val();
+        var $brand = $(".brand").val();
+        var $hardware_parameters = $(".hardware_parameters").val();
+        var $rittal = $(".rittal").val();
+        var $u_site = $(".u_site").val();
+        var $sn = $(".sn").val();
+
+        var $buy_time = $("#buy_time").val();
+        var $expire_date = $("#expire_date").val();
+        var $app_info = $("#app_info").val();
+        var $idc = $("#idc").val();
+        var $system = $(".system").val();
+
+        console.log($ip,$hostname,$managerip,$status,$env,$app_info,$idc,$brand,$hardware_parameters,$rittal,$u_site,$sn,$buy_time,$expire_date)
+
+        $.ajax({
+            url:'/server/add_host/',//发出请求
+            type:'post',
+            data:{"ip":$ip,"hostname":$hostname,"managerip":$managerip,"status":$status,"env":$env,"app_info":$app_info,"idc":$idc,"brand":$brand,"hardware_parameters":$hardware_parameters,"rittal":$rittal,"u_site":$u_site,"sn":$sn,"buy_time":$buy_time,"expire_date":$expire_date,"system":$system},
+            dataType:"json",
+            success:function (res)  {
+                console.log(res)
+                console.log(res.status)
+
+                if(res.status==1){//返回1说明登录成功
+
+                    layer.msg(res.msg,{time:300});
+                    setTimeout(function(){                    
+                    layer.closeAll("iframe");
+                    //刷新父页面
+                    parent.location.reload();},300)
+
+
+
+                            }
+                if(res.status==0){
+                    layer.msg(res.msg,function() {time:1000})
+                }
+            }
+
+        });
+
+        return false;
+
+             
+             
+             
+             
+
+
+        })
+
+    //格式化时间
+
+
+
+})</script>
+{% endblock script %}

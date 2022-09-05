@@ -1,0 +1,80 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="layui-tab-item layui-show">
+
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+        <legend> 应用详情</legend>
+      </fieldset>
+      <div class="layui-tab" lay-filter="current">
+        <ul class="layui-tab-title">
+          <li class="layui-this" lay-id="1">服务器信息</li>
+          <li lay-id="2">应用基本信息</li>
+        </ul>
+        <div class="layui-tab-content">
+          <div class="layui-tab-item layui-show">
+            <form class="layui-form">
+                
+				<table class="layui-table">
+					<thead>
+						<tr>
+							<th>ip</th>
+							<th>状态</th>
+							<th>环境</th>
+							<th>类型</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for obj in serverinfo %}
+						<tr>
+							<td>{{obj.ip}}</td>
+							<td>{{obj.status}}</td>
+							<td>{{obj.env}}</td>
+							<td>{{obj.type}}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+
+
+
+            </form></div>
+          <div class="layui-tab-item">
+
+
+            <form class="layui-form">
+                
+            </form>
+
+
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+    
+</div>
+
+
+
+
+{% endblock content %}
+
+
+
+
+
+
+

@@ -1,0 +1,149 @@
+
+{% extends "minibase.html" %}
+
+{% block content %}
+
+<form class="layui-form" style="width:80%;height: 580px">
+    <div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">业务英文名</label>
+		<div class="layui-input-block">
+			<input type="text" class="layui-input enName" lay-verify="required" placeholder="请输入应用英文名" disabled>
+		</div>
+	</div>
+
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">业务中文名</label>
+		<div class="layui-input-block">
+			<input type="text" class="layui-input cnName" lay-verify="required" placeholder="请输入应用中文名">
+		</div>
+	</div>
+
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">部门 </label>
+
+        <div class="layui-input-block">
+
+
+            <select  lay-filter="required" id="groups" name="groups" lay-search class="layui-input groups" >
+                <option value="">请选择部门</option>
+                {% for g in group %}
+                
+                <option value="{{g.id}}" name="{{g.name}}">{{g.name}}</option>
+            {% endfor %}			
+
+
+            </select>
+          </div>
+
+	</div>
+
+
+    <div class="layui-form-item layui-row layui-col-xs12">
+		<label class="layui-form-label">负责人</label>
+		<div class="layui-input-block">
+			<input type="text" class="layui-input manager" lay-verify="required" placeholder="请输入负责人">
+		</div>
+	</div>
+	<div class="layui-form-item layui-row layui-col-xs12">
+		<div class="layui-input-block">
+			<button class="layui-btn " lay-submit="" lay-filter="addUser">立即修改</button>
+  		</div>
+	</div>
+</form>
+
+
+
+{% endblock content %}
+
+
+{% block script %}
+
+<script>layui.use(['form','layer'],function(){
+    var form = layui.form
+        layer = parent.layer === undefined ? layui.layer : top.layer,
+        $ = layui.jquery;
+
+    gg=window.parent.group;
+
+
+    $.ajax({
+        url:'/cmdb/get_groups/',//发出请求
+        type:'get',
+        data:{"name":gg},
+        dataType:"json",
+
+        success:function (res)  {
+
+            var obj = document.getElementById("groups");
+
+            for (var i = 0; i < obj.options.length; i++){  
+                console.log(i,res.id)
+                if (obj.options[i].value == res.id){  
+                    obj.options[i].selected = true;  
+                    break;  
+                }  
+            }  
+            form.render('select');
+
+        }
+
+
+
+    });
+
+
+
+
+
+    form.on("submit(addUser)",function(data){
+        //弹出loading
+        var index = top.layer.msg('数据提交中，请稍候',{icon: 16,time:false,shade:0.8});
+
+
+        var $enName = $(".enName").val();
+        var $cnName = $(".cnName").val();
+        var $groups = $(".groups").val();
+        var $manager = $(".manager").val();
+        $.ajax({
+            url:'/cmdb/edit_appdomain/',//发出请求
+            type:'post',
+
+            data:{"enname":$enName,"cnname":$cnName,"group":$groups,"manager":$manager},
+            dataType:"json",
+
+            success:function (res)  {
+                console.log(res)
+                console.log(res.status)
+
+                if(res.status==1){//返回1说明登录成功
+
+                    layer.msg(res.msg, {time:300});
+                    setTimeout(function(){                    
+                    layer.closeAll("iframe");
+                    //刷新父页面
+                    parent.location.reload();},300)
+
+
+
+                            }
+                if(res.status==0){
+                    layer.msg(res.msg,function() {time:1000})
+                }
+            }
+
+        });
+
+        return false;
+
+             
+             
+             
+             
+
+
+        })
+
+
+
+})</script>
+{% endblock script %}
