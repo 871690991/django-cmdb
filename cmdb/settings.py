@@ -94,7 +94,7 @@ if env == "prd":
             'NAME': 'cmdb',                        # 数据库名 (默认与APP_ID相同)
             'USER': 'cmdb_user',                            # 你的数据库user
             'PASSWORD': '123456',                        # 你的数据库password
-            'HOST': '10.250.132.117',                                   # 数据库HOST
+            'HOST': '127.0.0.1',                                   # 数据库HOST
             'PORT': '3306',                        # 默认3306
         },
 }
