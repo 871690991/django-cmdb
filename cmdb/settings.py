@@ -93,7 +93,7 @@ if env == "prd":
             'ENGINE': 'django.db.backends.mysql',  # 默认用mysql
             'NAME': 'cmdb',                        # 数据库名 (默认与APP_ID相同)
             'USER': 'cmdb_user',                            # 你的数据库user
-            'PASSWORD': 'OP2z7yNz6Y8rUyl6',                        # 你的数据库password
+            'PASSWORD': '123456',                        # 你的数据库password
             'HOST': '10.250.132.117',                                   # 数据库HOST
             'PORT': '3306',                        # 默认3306
         },
