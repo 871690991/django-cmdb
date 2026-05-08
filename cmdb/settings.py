@@ -12,24 +12,20 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
-env="dev"
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
+env = os.getenv('DJANGO_ENV', 'dev')
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = os.getenv(
+    'DJANGO_SECRET_KEY',
+    'django-insecure-dev-only-key-change-in-production'
+)
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+DEBUG = env == 'dev'
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ku-ibb9o#cy-cmigy^9t+jx69yy$oghx8@to%aqxdz$k_)3%4r'
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',') if os.getenv('ALLOWED_HOSTS') else []
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -42,19 +38,17 @@ INSTALLED_APPS = [
     'core',
     'captcha',
     'openstack'
-
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
 ]
 
 ROOT_URLCONF = 'cmdb.urls'
@@ -71,8 +65,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-
-        'builtins' : [
+            'builtins': [
                 'django.templatetags.static'
             ],
         },
@@ -82,46 +75,42 @@ TEMPLATES = [
 WSGI_APPLICATION = 'cmdb.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-
-
 if env == "prd":
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',  # 默认用mysql
-            'NAME': 'cmdb',                        # 数据库名 (默认与APP_ID相同)
-            'USER': 'cmdb_user',                            # 你的数据库user
-            'PASSWORD': '123456',                        # 你的数据库password
-            'HOST': '127.0.0.1',                                   # 数据库HOST
-            'PORT': '3306',                        # 默认3306
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv('DB_NAME', 'cmdb'),
+            'USER': os.getenv('DB_USER', ''),
+            'PASSWORD': os.getenv('DB_PASSWORD', ''),
+            'HOST': os.getenv('DB_HOST', '127.0.0.1'),
+            'PORT': os.getenv('DB_PORT', '3306'),
+            'OPTIONS': {
+                'charset': 'utf8mb4',
+            },
         },
-}
-
+    }
 elif env == "test":
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',  # 默认用mysql
-            'NAME': 'cmdb',                        # 数据库名 (默认与APP_ID相同)
-            'USER': 'root',                            # 你的数据库user
-            'PASSWORD': '123456',                        # 你的数据库password
-            'HOST': '127.0.0.1',                                   # 数据库HOST
-            'PORT': '3306',                        # 默认3306
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.getenv('DB_NAME', 'cmdb'),
+            'USER': os.getenv('DB_USER', 'root'),
+            'PASSWORD': os.getenv('DB_PASSWORD', ''),
+            'HOST': os.getenv('DB_HOST', '127.0.0.1'),
+            'PORT': os.getenv('DB_PORT', '3306'),
+            'OPTIONS': {
+                'charset': 'utf8mb4',
+            },
         },
     }
-
 else:
     DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
 
-
-# Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -139,55 +128,66 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
-
-
-
 LANGUAGE_CODE = 'zh-hans'
 
 TIME_ZONE = 'Asia/Shanghai'
-
 
 USE_I18N = True
 
 USE_TZ = False
 
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-	os.path.join(BASE_DIR,"static")
+    os.path.join(BASE_DIR, "static")
 ]
-
-# if DEBUG:
-#     STATIC_PATH = os.path.join(BASE_DIR, 'static')
-#     STATIC_URL = '/static/'
-#     STATICFILES_DIRS = (STATIC_PATH,)
-# else:
-#     STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-#     STATIC_URL = '/static/'
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#邮件参数配置
-EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.qq.com'
-EMAIL_PORT = 25
-EMAIL_HOST_USER = '1083559808@qq.com'
-EMAIL_HOST_PASSWORD = 'tobbnlzyszfebaff'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.qq.com')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_TLS = True
 
-# 注册有效期天数
 CONFIRM_DAYS = 2
 
-
-
-
 X_FRAME_OPTIONS = 'SAMEORIGIN'
-SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
+CSRF_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = not DEBUG
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+
+if DEBUG:
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = False
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}

@@ -28,8 +28,8 @@ urlpatterns = [
     re_path(r'^$', views.index),
     path('admin/', admin.site.urls),
     path("index/", views.index),
-    path('login/', views.login),
-    path('logout/', views.logout),
+    path('login/', views.login_view),
+    path('logout/', views.logout_view),
     path('editpassword/', views.editpassword),
     path('get_navs/', views.get_navs),
 
