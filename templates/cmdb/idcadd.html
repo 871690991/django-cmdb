@@ -39,50 +39,30 @@
 
 {% block script %}
 
-<script>layui.use(['form','layer'],function(){
+<script>
+layui.use(['form','layer'],function(){
     var form = layui.form
         layer = parent.layer === undefined ? layui.layer : top.layer,
         $ = layui.jquery;
 
     form.on("submit(addUser)",function(data){
-        //弹出loading
         var index = top.layer.msg('数据提交中，请稍候',{icon: 16,time:false,shade:0.8});
-        // 实际使用时的提交信息
-        // $.post("上传路径",{
-        //     userName : $(".userName").val(),  //登录名
-        //     userEmail : $(".userEmail").val(),  //邮箱
-        //     userSex : data.field.sex,  //性别
-        //     userGrade : data.field.userGrade,  //会员等级
-        //     userStatus : data.field.userStatus,    //用户状态
-        //     newsTime : submitTime,    //添加时间
-        //     userDesc : $(".userDesc").text(),    //用户简介
-        // },function(res){
-        //
-        // })
 
-
-        var $idcname = $(".idcName").val();
-        var $idcnum = $(".idcNum").val();
-        var $idcaddress = $(".idcAddress").val()
+        var $idcname = $(".idcname").val();
+        var $idcnum = $(".idcnum").val();
+        var $idcaddress = $(".idcaddress").val()
         $.ajax({
-            url:'/cmdb/add_idc/',//发出请求
+            url:'/cmdb/add_idc/',
             type:'post',
             data:{"idcname":$idcname,"idcnum":$idcnum,"idcaddress":$idcaddress},
             dataType:"json",
-
             success:function (res)  {
-
-                if(res.status==1){//返回1说明登录成功
-
+                if(res.status==1){
                     layer.msg(res.msg,{time:300});
-                    setTimeout(function(){                    
+                    setTimeout(function(){
                     layer.closeAll("iframe");
-                    //刷新父页面
                     parent.location.reload();},300)
-
-
-
-                            }
+                }
                 if(res.status==0){
                     layer.msg(res.msg,function() {time:1000})
                 }
@@ -91,16 +71,8 @@
         });
 
         return false;
+    })
 
-             
-             
-             
-             
-
-
-        })
-
-    //格式化时间
     function filterTime(val){
         if(val < 10){
             return "0" + val;
@@ -108,7 +80,6 @@
             return val;
         }
     }
-    //定时发布
     var time = new Date();
     var submitTime = time.getFullYear()+'-'+filterTime(time.getMonth()+1)+'-'+filterTime(time.getDate())+' '+filterTime(time.getHours())+':'+filterTime(time.getMinutes())+':'+filterTime(time.getSeconds());
 

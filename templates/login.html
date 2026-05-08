@@ -15,6 +15,7 @@
 	<body>
 
 		<form class="layui-form">
+			{% csrf_token %}
 			<div class="container">
 				<div class=" layui-word-aux">
 					cmdb管理系统
@@ -46,20 +47,35 @@
 		<div class="loginBg"></div>
 		<canvas id="bgCanvas"></canvas>
 
+		<script type="text/javascript" src="/static/js/jquery.min.js"></script>
 		<script type="text/javascript" src="/static/layui/layui.js"></script>
 		<script src="/static/js/ribbon.js" type="text/javascript" charset="utf-8"></script>
 
 
 
 		<script>
+			function getCookie(name) {
+				let cookieValue = null;
+				if (document.cookie && document.cookie !== '') {
+					const cookies = document.cookie.split(';');
+					for (let i = 0; i < cookies.length; i++) {
+						const cookie = cookies[i].trim();
+						if (cookie.substring(0, name.length + 1) === (name + '=')) {
+							cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+							break;
+						}
+					}
+				}
+				return cookieValue;
+			}
+
 			layui.use(['form','jquery', 'layedit', 'laydate'], function(){
 				var form = layui.form
 					,layer = layui.layer
 					,layedit = layui.layedit
 					,$= layui.jquery
 					,laydate = layui.laydate;
-		
-				//监听提交
+				
 				form.on('submit(login)', function(data){
 					var $1 = $.trim($("#username").val());
 					var $2 = $.trim($("#password").val());
@@ -75,23 +91,21 @@
 					}
 		
 					$.ajax({
-						url:'/login/',//发出请求
+						url:'/login/',
 						type:'post',
 						data:{"username":$1,"password":$2},
 						dataType:"json",
-
+						beforeSend: function(xhr) {
+							xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+						},
 						success:function (res)  {
-							console.log(res)
-							console.log(res.status)
-
-							if(res.status==1){//返回1说明登录成功
+							if(res.status==1){
 								window.location.href="/index/"
 							}
 							if(res.status==0){
 								layer.msg(res.msg,function() {time:1111100})
 							} 
 						}
-
 					});
 		
 					return false;

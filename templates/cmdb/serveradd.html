@@ -175,7 +175,23 @@
 
 {% block script %}
 
-<script>layui.use(['form','layer','laydate'],function(){
+<script>
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+layui.use(['form','layer','laydate'],function(){
     var form = layui.form
         layer = parent.layer === undefined ? layui.layer : top.layer,
         $ = layui.jquery;
@@ -224,10 +240,13 @@
         console.log($ip,$hostname,$managerip,$status,$env,$app_info,$idc,$brand,$hardware_parameters,$rittal,$u_site,$sn,$buy_time,$expire_date)
 
         $.ajax({
-            url:'/server/add_host/',//发出请求
+            url:'/server/add_host/',
             type:'post',
             data:{"ip":$ip,"hostname":$hostname,"managerip":$managerip,"status":$status,"env":$env,"app_info":$app_info,"idc":$idc,"brand":$brand,"hardware_parameters":$hardware_parameters,"rittal":$rittal,"u_site":$u_site,"sn":$sn,"buy_time":$buy_time,"expire_date":$expire_date,"system":$system},
             dataType:"json",
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            },
             success:function (res)  {
                 console.log(res)
                 console.log(res.status)
