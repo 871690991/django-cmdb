@@ -1,11 +1,6 @@
 
 
 #coding=utf-8
-from ast import Num
-from email.headerregistry import Address
-from logging import exception
-from telnetlib import STATUS
-from tokenize import group
 from django.shortcuts import render,redirect
 from core.models import *
 from django.http import HttpResponse
